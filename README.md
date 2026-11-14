@@ -1,5 +1,7 @@
 # HostCrust Patch Proof: which CVEs are really open on your Linux server?
 
+**Docs and examples:** [hostcrust.com/tools/patch-proof](https://hostcrust.com/tools/patch-proof/)
+
 **HostCrust Patch Proof shows which CVEs are really open on your Linux server, counting backported fixes and the running kernel.** It is a free, read-only command-line tool for Ubuntu, Debian, AlmaLinux and Rocky Linux. It installs nothing on the server, needs no root, and writes one self-contained HTML report.
 
 ## Install and run
@@ -174,4 +176,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
 Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE). The vulnerability data comes from OSV.dev and the distributions' security trackers under their own terms.
 
-Want this every day for every server, with receipts? HostCrust (launching soon): https://hostcrust.com
+Docs, examples and comparisons: https://hostcrust.com/tools/patch-proof/ · Made by HostCrust, guarded operations for Linux servers (early access): https://hostcrust.com/
