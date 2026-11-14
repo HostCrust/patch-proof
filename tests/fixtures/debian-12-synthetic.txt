@@ -1,0 +1,37 @@
+# hcproof-collector 1
+## os-release
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+VERSION="12 (bookworm)"
+VERSION_CODENAME=bookworm
+ID=debian
+## kernel
+release=6.1.0-26-amd64
+build=#1 SMP PREEMPT_DYNAMIC Debian 6.1.112-1
+arch=x86_64
+image=6.1.0-26-amd64
+image=6.1.0-54-amd64
+## reboot-required
+flag=yes
+pkg=linux-image-6.1.0-54-amd64
+## packages
+format=dpkg
+install ok installed	curl	7.88.1-10+deb12u8	amd64	
+install ok installed	libc-bin	2.36-9+deb12u7	amd64	glibc
+install ok installed	libc6	2.36-9+deb12u7	amd64	glibc
+install ok installed	libcurl4	7.88.1-10+deb12u8	amd64	curl
+install ok installed	libssl3	3.0.15-1~deb12u1	amd64	openssl
+deinstall ok config-files	linux-image-6.1.0-25-amd64	6.1.106-3	amd64	linux-signed-amd64 (6.1.106+3)
+install ok installed	linux-image-6.1.0-26-amd64	6.1.112-1	amd64	linux-signed-amd64 (6.1.112+1)
+install ok installed	linux-image-6.1.0-54-amd64	6.1.190-1	amd64	linux-signed-amd64 (6.1.190+1)
+install ok installed	linux-image-amd64	6.1.190-1	amd64	linux-signed-amd64 (6.1.190+1)
+install ok installed	nginx	1.26.2-1~bookworm	amd64	
+install ok installed	openssh-client	1:9.2p1-2+deb12u3	amd64	openssh
+install ok installed	openssh-server	1:9.2p1-2+deb12u3	amd64	openssh
+install ok installed	openssh-sftp-server	1:9.2p1-2+deb12u3	amd64	openssh
+install ok installed	openssl	3.0.15-1~deb12u1	amd64	
+install ok installed	php8.2-cli	8.2.29-1+0~20250703.84+debian12~1.gbp9d6f8e	amd64	php8.2
+install ok installed	php8.2-common	8.2.29-1+0~20250703.84+debian12~1.gbp9d6f8e	all	php8.2
+install ok installed	sudo	1.9.13p3-1+deb12u1	amd64	
+## end

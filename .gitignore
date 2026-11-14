@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+.DS_Store
+# Bulk OSV data and built indexes live in the user cache, never in the repo.
+*.sqlite
+*.sqlite.tmp*
+*.sqlite.gz
+*.sqlite.gz.sha256
+all.zip
+# Reports you generate locally (the published samples live in samples/).
+/report*.html
+/report*.json
+# Publisher notes for the first release; not part of the repository.
+RELEASE-NOTES-FOR-PUBLISHER.md

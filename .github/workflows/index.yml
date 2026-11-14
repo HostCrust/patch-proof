@@ -1,0 +1,98 @@
+name: Daily index
+
+# Rebuilds the SQLite index from OSV.dev once a day and publishes it, gzipped, with its
+# SHA-256, as assets of the release tagged "index-latest". `hc-proof report` downloads it
+# by default (--prebuilt), so users don't have to fetch the 816 MB Ubuntu OSV file.
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: # rebuild straight away when the index format or this workflow changes (also the very first push)
+      - ".github/workflows/index.yml"
+      - "hcproof/index.py"
+      - "hcproof/osv.py"
+
+permissions: {}
+
+concurrency:
+  group: index-latest
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and publish the prebuilt index
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write # create the index-latest release and replace its assets
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Tests (never publish an index built by broken code)
+        run: python -m unittest discover -s tests -t .
+
+      - name: Build the index from OSV.dev
+        env:
+          HCPROOF_CACHE: ${{ runner.temp }}/hcproof-cache
+        run: python -m hcproof index build --out index.sqlite
+
+      - name: Check the index and write the release notes
+        run: |
+          python - <<'PY'
+          import json, sqlite3
+          from hcproof.index import SCHEMA_VERSION, SCOPE_ECOSYSTEMS, with_companions
+          db = sqlite3.connect("file:index.sqlite?mode=ro", uri=True)
+          meta = dict(db.execute("SELECT key, value FROM meta"))
+          rows = db.execute("SELECT count(*) FROM affected").fetchone()[0]
+          db.close()
+          ecos = json.loads(meta["ecosystems"])
+          assert meta["schema_version"] == SCHEMA_VERSION, meta["schema_version"]
+          missing = set(with_companions(SCOPE_ECOSYSTEMS)) - set(ecos)
+          assert not missing, f"missing ecosystems: {missing}"
+          assert rows > 1_000_000, f"only {rows} rows"
+          snaps = "\n".join(f"- {k.split(':', 1)[1]}: {v}" for k, v in sorted(meta.items()) if k.startswith("snapshot_utc:"))
+          notes = f"""Prebuilt index for HostCrust Patch Proof, rebuilt daily from OSV.dev data by the `Daily index` workflow.
+
+          - Built: {meta['built_utc']} by {meta['generator']}
+          - Rows: {rows:,} from {int(meta['records']):,} OSV records
+          - Ecosystems: {', '.join(ecos)}
+
+          OSV snapshot per distribution family (the Last-Modified time of each OSV `all.zip`):
+          {snaps}
+
+          `hc-proof report` downloads `index.sqlite.gz` from this release by default and checks it against `index.sqlite.gz.sha256`.
+          To check by hand: `sha256sum -c index.sqlite.gz.sha256`.
+          The vulnerability data comes from OSV.dev and the distributions' own security data, under each source's terms (Ubuntu CC-BY-SA 4.0, AlmaLinux MIT, Rocky Linux BSD; see https://google.github.io/osv.dev/data/ and NOTICE). It is not covered by the code's Apache-2.0 license.
+          """
+          open("notes.md", "w").write("\n".join(line.strip() if not line.startswith("- ") else line for line in notes.splitlines()) + "\n")
+          print(notes)
+          PY
+
+      - name: Compress and hash
+        run: |
+          gzip -9 -n index.sqlite
+          sha256sum index.sqlite.gz > index.sqlite.gz.sha256
+          ls -l index.sqlite.gz
+          cat index.sqlite.gz.sha256
+
+      - name: Publish to the index-latest release
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if ! gh release view index-latest > /dev/null 2>&1; then
+            gh release create index-latest --title "Prebuilt index (updated daily)" --notes-file notes.md --latest=false
+          fi
+          gh release upload index-latest index.sqlite.gz --clobber
+          gh release upload index-latest index.sqlite.gz.sha256 --clobber
+          gh release edit index-latest --notes-file notes.md

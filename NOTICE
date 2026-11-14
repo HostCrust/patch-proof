@@ -1,0 +1,24 @@
+HostCrust Patch Proof
+Copyright 2026 DigiRDP, LLC
+
+This product includes software developed by DigiRDP, LLC (https://hostcrust.com).
+
+Vulnerability data
+------------------
+HostCrust Patch Proof reads vulnerability data from OSV.dev (https://osv.dev), which
+collects the security data published by Debian, Ubuntu (Canonical), AlmaLinux and
+Rocky Linux. Thanks to the OSV.dev team and to each distribution's security team.
+
+This data is not covered by the Apache-2.0 license of the code. It stays under the terms
+of each original source; OSV.dev lists them at https://google.github.io/osv.dev/data/
+(as of November 2026: Ubuntu CC-BY-SA 4.0, AlmaLinux MIT, Rocky Linux BSD; no license
+is stated there for Debian's data). That applies to:
+
+  - tests/fixtures/osv-subset.json.gz: a small extract of OSV.dev bulk data
+    (Ubuntu and Debian snapshots of 14 Nov 2026), used by the tests;
+  - the prebuilt index (index.sqlite.gz) published with this project's GitHub releases,
+    which is derived from OSV.dev bulk data;
+  - the sample reports in samples/, which quote that data.
+
+Bulk data downloaded at run time comes directly from OSV.dev
+(https://osv-vulnerabilities.storage.googleapis.com) or from the prebuilt index above.

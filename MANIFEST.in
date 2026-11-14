@@ -1,0 +1,2 @@
+include collect.sh
+recursive-include tests *.py *.json *.json.gz *.txt

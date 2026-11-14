@@ -1,0 +1,53 @@
+{
+ "snapshot_utc": "2026-11-14T07:03:07Z",
+ "snapshot_utc:Debian": "2026-11-14T11:02:45Z",
+ "snapshot_utc:Ubuntu": "2026-11-14T07:03:07Z",
+ "ubuntu-24.04-vm.txt": {
+  "counts": {
+   "open": [
+    9261,
+    3
+   ],
+   "notrunning": [
+    0,
+    0
+   ],
+   "nofix": [
+    1564,
+    87
+   ],
+   "backport": [
+    777,
+    95
+   ],
+   "fixed": [
+    112,
+    27
+   ]
+  }
+ },
+ "debian-12-synthetic.txt": {
+  "counts": {
+   "open": [
+    69,
+    5
+   ],
+   "notrunning": [
+    5657,
+    1
+   ],
+   "nofix": [
+    2099,
+    6
+   ],
+   "backport": [
+    38,
+    3
+   ],
+   "fixed": [
+    8139,
+    6
+   ]
+  }
+ }
+}

@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # Keeps the pinned commit SHAs of actions/checkout and actions/setup-python current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
